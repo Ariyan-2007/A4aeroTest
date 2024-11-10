@@ -37,7 +37,10 @@ namespace A4aeroTest.Utilities
             var ipRes = await _httpClient.GetStringAsync("https://api.ipify.org?format=json");
             var ipJson = JsonSerializer.Deserialize<JsonElement>(ipRes);
             var ipAddress = ipJson.GetProperty("ip").GetString();
-
+            if(ipAddress == null)
+            {
+                throw new NullReferenceException(nameof(ipAddress));
+            }
             using (JsonDocument doc = JsonDocument.Parse(resBody))
             {
                 var combinedRes = new Dictionary<string, object>();
@@ -55,11 +58,15 @@ namespace A4aeroTest.Utilities
 
                 var authRes = JsonSerializer.Deserialize<AuthResponse>(combinedJson);
 
+                if( authRes == null)
+                {
+                    throw new InvalidOperationException("Authentication Response is either empty or null");
+                }
                 return authRes;
             }
         }
 
-        public async Task<List<FlightSearchResponse>> SearchFlightsAsync(TBOFlightSearchRequest req)
+        public async Task<dynamic> SearchFlightsAsync(TBOFlightSearchRequest req)
         {
 
             
@@ -71,14 +78,16 @@ namespace A4aeroTest.Utilities
 
             res.EnsureSuccessStatusCode();
 
-            var resBody = await res.Content.ReadAsStringAsync();
+            var resJsonBody = await res.Content.ReadAsStringAsync();
 
-            if (string.IsNullOrEmpty(resBody))
+            var resBody = JsonSerializer.Deserialize<dynamic>(resJsonBody);
+
+            if (resBody ==  null)
             {
                 throw new InvalidOperationException("Response body is empty or null.");
             }
 
-            return JsonSerializer.Deserialize<List<FlightSearchResponse>>(resBody);
+            return resBody;
         }
     }
 }

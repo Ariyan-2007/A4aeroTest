@@ -15,7 +15,7 @@ namespace A4aeroTest.Services.Implementations
             _client = client;
         }
 
-        public async Task<List<FlightSearchResponse>> SearchFlightsAsync(FlightSearchRequest req) 
+        public async Task<dynamic> SearchFlightsAsync(FlightSearchRequest req) 
         {
             var auth = await _authService.GetAuthInfoAsync();
 
@@ -57,7 +57,12 @@ namespace A4aeroTest.Services.Implementations
 
             if (req.IsRoundTrip)
             {
-                var returnSegment = new Segment { Origin = req.Destination, Destination = req.Origin, PreferredDepartureTime = req.ReturnDate ?? req.DepartureDate, PreferredArrivalTime = req.ReturnDate ?? req.DepartureDate };
+                var returnSegment = new Segment { 
+                    Origin = req.Destination, 
+                    Destination = req.Origin, 
+                    PreferredDepartureTime = req.ReturnDate ?? req.DepartureDate, 
+                    PreferredArrivalTime = req.ReturnDate ?? req.DepartureDate 
+                };
 
                 tboReq.Segment.Add(returnSegment);
             }

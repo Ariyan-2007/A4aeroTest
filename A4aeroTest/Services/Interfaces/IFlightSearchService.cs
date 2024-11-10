@@ -5,6 +5,6 @@ namespace A4aeroTest.Services.Interfaces
     public interface IFlightSearchService
     {
 
-        Task<List<FlightSearchResponse>> SearchFlightsAsync(FlightSearchRequest req); 
+        Task<dynamic> SearchFlightsAsync(FlightSearchRequest req); 
     }
 }
