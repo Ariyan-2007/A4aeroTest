@@ -1,0 +1,6 @@
+@A4aeroTest_HostAddress = http://localhost:5091
+
+GET {{A4aeroTest_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
